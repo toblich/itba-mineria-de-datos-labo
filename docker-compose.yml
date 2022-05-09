@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  jupyter:
+    # image: jupyter/datascience-notebook
+    build:
+      context: .
+    ports:
+      - "8888:8888"
+    volumes:
+      - ".:/home/jovyan/work"
+    environment:
+      - JUPYTER_TOKEN=itba
+      # - JUPYTER_ENABLE_LAB=yes
+    container_name: itba-jupyter
