@@ -20,7 +20,7 @@ particionar  <- function( data,  division, agrupa="",  campo="fold", start=1, se
 #------------------------------------------------------------------------------
 
 #Aqui se debe poner la carpeta de la computadora local
-setwd("D:\\gdrive\\Austral2022R\\")   #Establezco el Working Directory
+setwd("D:\\gdrive\\ITBA2022A\\")   #Establezco el Working Directory
 #cargo los datos
 
 dataset  <- fread("./datasets/paquete_premium_202011.csv")
