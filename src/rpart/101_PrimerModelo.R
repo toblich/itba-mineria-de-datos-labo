@@ -7,19 +7,28 @@ require("rpart")
 require("rpart.plot")
 
 # Aquí se debe poner la carpeta de SU computadora local
-setwd("/Users/tlichtig/Desktop/ITBA/2-mineria-de-datos/") # Establezco el Working Directory
+setwd("/Users/tlichtig/Desktop/ITBA/2-mineria-de-datos/labo") # Establezco el Working Directory
 
 # cargo los datos de 202011 que es donde voy a ENTRENAR el modelo
 dtrain <- fread("./datasets/paquete_premium_202011.csv")
+
+hiperparams <- data.frame(
+  cp = -0.3,
+  minsplit = 30,
+  minbucket = 5,
+  maxdepth = 8
+)
+
+print(hiperparams)
 
 # genero el modelo,  aquí se construye el árbol
 modelo <- rpart("clase_ternaria ~ .", # quiero predecir clase_ternaria a partir de el resto de las variables
   data = dtrain,
   xval = 0,
-  cp = -0.3, # esto significa no limitar la complejidad de los splits
-  minsplit = 80, # minima cantidad de registros para que se haga el split
-  minbucket = 1, # tamaño mínimo de una hoja
-  maxdepth = 4
+  cp = hiperparams$cp, # esto significa no limitar la complejidad de los splits
+  minsplit = hiperparams$minsplit, # minima cantidad de registros para que se haga el split
+  minbucket = hiperparams$minbucket, # tamaño mínimo de una hoja
+  maxdepth = hiperparams$maxdepth
 ) # profundidad maxima del árbol
 
 
