@@ -1,4 +1,4 @@
-timestamp, cp, minsplit, min_bucket, max_depth, ganancia_promedio
+timestamp, cp, minsplit, minbucket, maxdepth, ganancia_promedio
 2022-05-14 18:56:27, 0.01, 200, 100, 6, 0
 2022-05-14 18:56:43, 0.01, 200, 100, 9, 0
 2022-05-14 18:56:56, 0.01, 200, 100, 12, 0
