@@ -5,6 +5,8 @@ gc() # Garbage Collection
 require("data.table")
 require("rpart")
 require("rpart.plot")
+require("ggplot2")
+library("ggrepel")
 
 # Aquí se debe poner la carpeta de SU computadora local
 setwd("/Users/tlichtig/Desktop/ITBA/2-mineria-de-datos/labo") # Establezco el Working Directory
@@ -12,15 +14,49 @@ setwd("/Users/tlichtig/Desktop/ITBA/2-mineria-de-datos/labo") # Establezco el Wo
 # cargo la salida del Grid Search, verifique que corresponda a la carpeta donde dejó el resultado
 dtrain <- fread("./labo/exp/HT2020/gridsearch.csv")
 
-plot(ganancia_promedio ~ cp, data = dtrain, main = "CP", type = "b")
-plot(ganancia_promedio ~ minsplit, data = dtrain, main = "MIN SPLIT", type = "b")
-plot(ganancia_promedio ~ minbucket, data = dtrain, main = "MIN BUCKET", type = "b")
-plot(ganancia_promedio ~ maxdepth, data = dtrain, main = "MAX DEPTH", type = "b")
+# gain.plot <- function(varname = "cp") {
+varname <- "maxdepth"
+# plot(dtrain$ganancia_promedio ~ dtrain[, varname], main = varname, type = "p", pch = 19, col = "blue")
+vars <- Filter(function(name) name != varname, c("cp", "minsplit", "minbucket", "maxdepth"))
+other.params <- data.table()
+for (var in vars) {
+  tmp <- data.table(unique(dtrain[, ..var]))
+  other.params <- other.params[, as.list(tmp), by = other.params]
+  # print(other.params)
+}
+varvals <- dtrain[, ..varname]
+# plot(xlim = c(min(varvals), max(varvals)), ylim = c(min(dtrain$ganancia_promedio), max(dtrain$ganancia_promedio)))
+
+p <- ggplot(data = dtrain[1, ], mapping = aes_string(x = varname, y = "ganancia_promedio")) #+
+# ylim(min(dtrain$ganancia_promedio), max(dtrain$ganancia_promedio)) +
+# xlim(min(varvals), max(varvals))
+n <- nrow(other.params)
+cols <- rainbow(n)
+for (i in 1:n) {
+  rowdata <- other.params[i, ]
+  dots <- dtrain[rowdata, on = colnames(rowdata)]
+  dots$idx <- i
+  if (any(is.na(dots))) {
+    next
+  }
+  # print(dots)
+  p <- p +
+    geom_line(data = dots, col = cols[i]) +
+    geom_label(data = dots, mapping = aes(label = paste(rowdata, collapse = " ")), nudge_x = 1)
+}
+print(p)
+# }
+
+# gain.plot("cp")
+# gain.plot("minsplit")
+# gain.plot("minbucket")
+# gain.plot("maxdepth")
 
 
 # genero el modelo,  aquí se construye el árbol
 # este sera un árbol de REGRESIÓN ya que la variable objetivo, ganancia_promedio,  es una variable continua
-modelo <- rpart("ganancia_promedio ~ . - timestamp", # quiero predecir clase_ternaria a partir de el resto de las variables
+# quiero predecir clase_ternaria a partir de el resto de las variables
+modelo <- rpart("ganancia_promedio ~ . - timestamp",
   data = dtrain,
   xval = 0,
   cp = 0,
@@ -37,5 +73,5 @@ modelo <- rpart("ganancia_promedio ~ . - timestamp", # quiero predecir clase_ter
 
 # finalmente, genero el grafico guardándolo en un archivo pdf
 # pdf(archivo_salida, paper = "a4r")
-prp(modelo, extra = 101, digits = 5, branch = 1, type = 4, varlen = 0, faclen = 0)
+# prp(modelo, extra = 101, digits = 5, branch = 1, type = 4, varlen = 0, faclen = 0)
 # dev.off()
