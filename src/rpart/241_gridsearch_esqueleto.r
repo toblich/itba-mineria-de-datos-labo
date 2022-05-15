@@ -98,7 +98,7 @@ archivo_salida <- "./labo/exp/HT2020/gridsearch.csv"
 # la forma que no suceda lo anterior es con append=TRUE
 
 header <- paste(
-  c("timestamp", "cp", "minsplit", "min_bucket", "max_depth", "ganancia_promedio"),
+  c("timestamp", "cp", "minsplit", "minbucket", "maxdepth", "ganancia_promedio"),
   sep = "", collapse = ", "
 )
 print(header)
@@ -112,17 +112,17 @@ cat(
 
 # itero por los loops anidados para cada hiperparámetro
 
-for (vcp in c(0.01, -0.1, -0.3)) {
-  for (vmin_split in c(200, 100, 50)) {
+for (vcp in c(-0.1, -0.2, -0.3, -0.4, -0.5)) {
+  for (vmin_split in c(1000, 500, 200, 100, 50)) {
     for (vmin_bucket in c(200, 100, 50, 10)) {
-      for (vmax_depth in seq(6, 15, 3)) {
+      for (vmax_depth in seq(3, 13, 2)) {
         if (vmin_bucket > vmin_split / 2) {
           # No tiene sentido pedir splits si las hojas están requeridas de tener más de la mitad de los nodos
           next
         }
-        if ((vmin_split <= 100) & (vmax_depth < 6)) {
-          next
-        }
+        # if ((vmin_split <= 100) & (vmax_depth < 6)) {
+        #   next
+        # }
 
         # print(timestamp())
         # notar como se agrega - MISMO ORDEN QUE HEADER!!!!
