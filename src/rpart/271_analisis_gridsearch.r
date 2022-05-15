@@ -16,7 +16,6 @@ setwd("/Users/tlichtig/Desktop/ITBA/2-mineria-de-datos/labo") # Establezco el Wo
 dtrain <- fread("./labo/exp/HT2020/gridsearch.csv")
 
 gain.plot <- function(varname) {
-  # varname <- "maxdepth"
   vars <- Filter(function(name) name != varname, c("cp", "minsplit", "minbucket", "maxdepth"))
   other.params <- data.table()
   for (var in vars) {
@@ -25,12 +24,15 @@ gain.plot <- function(varname) {
   }
   varvals <- dtrain[, ..varname]
 
+  mmax <- max(varvals)
+
   p <- ggplot(data = dtrain[1, ], mapping = aes_string(x = varname, y = "ganancia_promedio")) +
     ylim(min(dtrain$ganancia_promedio), max(dtrain$ganancia_promedio)) +
-    xlim(min(varvals), max(varvals) * 1.05)
-  n <- nrow(other.params)
-  cols <- rainbow(n)
-  for (i in 1:n) {
+    xlim(min(varvals), ifelse(mmax > 0, mmax * 1.05, mmax * 0.96))
+
+  N <- nrow(other.params)
+  cols <- rainbow(N)
+  for (i in 1:N) {
     rowdata <- other.params[i, ]
     dots <- dtrain[rowdata, on = colnames(rowdata)]
     dots$idx <- i
@@ -40,6 +42,7 @@ gain.plot <- function(varname) {
     }
     # print(dots)
     p <- p +
+      geom_point(data = dots, col = cols[i], size = .5) +
       geom_line(data = dots, col = cols[i]) +
       geom_dl(data = dots, mapping = aes(label = params), method = "last.points")
   }
@@ -72,5 +75,5 @@ modelo <- rpart("ganancia_promedio ~ . - timestamp",
 
 # finalmente, genero el grafico guardándolo en un archivo pdf
 # pdf(archivo_salida, paper = "a4r")
-# prp(modelo, extra = 101, digits = 5, branch = 1, type = 4, varlen = 0, faclen = 0)
+prp(modelo, extra = 101, digits = 5, branch = 1, type = 4, varlen = 0, faclen = 0)
 # dev.off()

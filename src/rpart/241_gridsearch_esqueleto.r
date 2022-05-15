@@ -112,10 +112,10 @@ cat(
 
 # itero por los loops anidados para cada hiperparámetro
 
-for (vcp in c(-0.1, -0.2, -0.3, -0.4, -0.5)) {
-  for (vmin_split in c(1000, 500, 200, 100, 50)) {
-    for (vmin_bucket in c(200, 100, 50, 10)) {
-      for (vmax_depth in seq(3, 13, 2)) {
+for (vcp in c(-0.1)) {
+  for (vmin_split in c(3000, 2000, 1500, 1200, 1000, 800, 500, 200, 100, 50)) {
+    for (vmin_bucket in c(700, 500, 200, 120, 100, 80, 50, 10)) {
+      for (vmax_depth in seq(2, 11, 1)) {
         if (vmin_bucket > vmin_split / 2) {
           # No tiene sentido pedir splits si las hojas están requeridas de tener más de la mitad de los nodos
           next
