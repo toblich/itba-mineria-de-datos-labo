@@ -14,9 +14,9 @@ dtrain <- fread("./datasets/paquete_premium_202011.csv")
 
 hiperparams <- data.frame(
   cp = -0.3,
-  minsplit = 30,
-  minbucket = 5,
-  maxdepth = 8
+  minsplit = 1500,
+  minbucket = 300,
+  maxdepth = 6
 )
 
 print(hiperparams)
@@ -33,7 +33,7 @@ modelo <- rpart("clase_ternaria ~ .", # quiero predecir clase_ternaria a partir 
 
 
 # grafico el árbol
-prp(modelo, extra = 101, digits = 5, branch = 1, type = 4, varlen = 0, faclen = 0)
+# prp(modelo, extra = 101, digits = 5, branch = 1, type = 4, varlen = 0, faclen = 0)
 
 
 # Ahora aplico al modelo  a los datos de 202101  y genero la salida para kaggle
@@ -62,6 +62,6 @@ dir.create("./labo/exp/")
 dir.create("./labo/exp/KA2001")
 
 fwrite(entrega,
-  file = "./labo/exp/KA2001/K101_001.csv",
+  file = sprintf("./labo/exp/KA2001/K101_001_%i_%i_%i.csv", hiperparams$minsplit, hiperparams$minbucket, hiperparams$maxdepth),
   sep = ","
 )
