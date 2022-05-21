@@ -190,3 +190,7 @@ labo/exp/*
 !labo/exp/HT2020
 labo/exp/HT2020/*
 !labo/exp/HT2020/gridsearch.csv
+
+!labo/exp/HT3210
+labo/exp/HT3210/*
+!labo/exp/HT3210/HT321.txt
