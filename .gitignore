@@ -186,6 +186,7 @@ project/target
 datasets/
 
 labo/exp/*
+exp/*
 
 !labo/exp/HT2020
 labo/exp/HT2020/*

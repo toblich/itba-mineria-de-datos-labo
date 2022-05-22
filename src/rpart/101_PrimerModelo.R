@@ -14,9 +14,9 @@ dtrain <- fread("./datasets/paquete_premium_202011.csv")
 
 hiperparams <- data.frame(
   cp = -0.3,
-  minsplit = 1500,
-  minbucket = 300,
-  maxdepth = 6
+  minsplit = 2000,
+  minbucket = 500,
+  maxdepth = 5
 )
 
 print(hiperparams)
