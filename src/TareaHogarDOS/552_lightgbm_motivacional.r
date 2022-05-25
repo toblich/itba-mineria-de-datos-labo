@@ -18,7 +18,7 @@ require("data.table")
 require("lightgbm")
 
 
-ksemilla <- 102191 # poner aqui la PRIMERA de sus cinco semillas
+ksemilla <- 100003 # poner aqui la PRIMERA de sus cinco semillas
 
 # Aqui se debe poner la carpeta de la computadora local
 setwd("/Users/tlichtig/Desktop/ITBA/2-mineria-de-datos/labo") # Establezco el Working Directory
