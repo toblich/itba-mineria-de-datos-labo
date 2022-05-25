@@ -12,11 +12,13 @@ setwd("/Users/tlichtig/Desktop/ITBA/2-mineria-de-datos/labo") # Establezco el Wo
 # cargo los datos de 202011 que es donde voy a ENTRENAR el modelo
 dtrain <- fread("./datasets/paquete_premium_202011.csv")
 
+set.seed(10003)
+
 hiperparams <- data.frame(
-  cp = -0.3,
-  minsplit = 2000,
-  minbucket = 500,
-  maxdepth = 5
+  cp = -1,
+  minsplit = 2267,
+  minbucket = 399,
+  maxdepth = 16
 )
 
 print(hiperparams)
@@ -58,10 +60,13 @@ entrega <- dapply[, list(numero_de_cliente, Predicted)] # genero la salida
 
 # genero el archivo para Kaggle
 # creo la carpeta donde va el experimento
-dir.create("./labo/exp/")
-dir.create("./labo/exp/KA2001")
+dir.create("./labo/exp/", showWarnings = FALSE)
+dir.create("./labo/exp/KA2001", showWarnings = FALSE)
 
 fwrite(entrega,
-  file = sprintf("./labo/exp/KA2001/K101_001_%i_%i_%i.csv", hiperparams$minsplit, hiperparams$minbucket, hiperparams$maxdepth),
+  file = sprintf(
+    "./labo/exp/KA2001/K101_001_%i_%i_%i.csv",
+    hiperparams$minsplit, hiperparams$minbucket, hiperparams$maxdepth
+  ),
   sep = ","
 )
