@@ -159,7 +159,7 @@ EstimarGanancia_ranger <- function(x) {
 setwd("/home/tlichtig/buckets/b1") # Establezco el Working Directory
 
 # cargo el dataset donde voy a entrenar el modelo
-dataset <- fread("./datasets/paquete_premium_202011.csv", stringsAsFactors = TRUE) # donde entreno
+dataset <- fread("./datasets/paquete_premium_202011.csv.gz", stringsAsFactors = TRUE) # donde entreno
 
 
 # creo la carpeta donde va el experimento
