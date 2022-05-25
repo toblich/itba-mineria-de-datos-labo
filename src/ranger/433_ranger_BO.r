@@ -5,17 +5,17 @@ rm(list = ls()) # remove all objects
 gc() # garbage collection
 
 
-require("data.table")
-require("rlist")
-require("yaml")
+library("data.table")
+library("rlist")
+library("yaml")
 
-require("ranger")
-require("randomForest") # solo se usa para imputar nulos
-require("parallel")
+library("ranger")
+library("randomForest") # solo se usa para imputar nulos
+library("parallel")
 
 # paquetes necesarios para la Bayesian Optimization
-require("DiceKriging")
-require("mlrMBO")
+library("DiceKriging")
+library("mlrMBO")
 
 
 
@@ -156,7 +156,7 @@ EstimarGanancia_ranger <- function(x) {
 # Aquí comienza el programa
 
 # Aquí se debe poner la carpeta de la computadora local
-setwd("D:\\gdrive\\ITBA2022A\\") # Establezco el Working Directory
+setwd("/home/tlichtig/buckets/b1") # Establezco el Working Directory
 
 # cargo el dataset donde voy a entrenar el modelo
 dataset <- fread("./datasets/paquete_premium_202011.csv", stringsAsFactors = TRUE) # donde entreno
@@ -164,9 +164,8 @@ dataset <- fread("./datasets/paquete_premium_202011.csv", stringsAsFactors = TRU
 
 # creo la carpeta donde va el experimento
 # HT  representa  Hyperparameter Tuning
-dir.create("./labo/exp/", showWarnings = FALSE)
-dir.create("./labo/exp/HT4330/", showWarnings = FALSE)
-setwd("D:\\gdrive\\ITBA2022A\\labo\\exp\\HT4330\\") # Establezco el Working Directory DEL EXPERIMENTO
+dir.create("./exp/HT4330", showWarnings = FALSE)
+setwd("/home/tlichtig/buckets/b1/exp/HT4330") # Establezco el Working Directory DEL EXPERIMENTO
 
 # en estos archivos quedan los resultados
 kbayesiana <- "HT433.RDATA"
