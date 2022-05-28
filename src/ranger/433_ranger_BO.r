@@ -24,10 +24,10 @@ kBO_iter <- 100 # cantidad de iteraciones de la Optimización Bayesiana
 
 # Estructura que define los hiperparámetros y sus rangos
 hs <- makeParamSet(
-  makeIntegerParam("num.trees", lower = 100L, upper = 2500L), # la letra L al final significa ENTERO
-  makeIntegerParam("max.depth", lower = 1L, upper = 30L), # 0 significa profundidad infinita
-  makeIntegerParam("min.node.size", lower = 1L, upper = 500L),
-  makeIntegerParam("mtry", lower = 2L, upper = 50L)
+  makeIntegerParam("num.trees", lower = 2000L, upper = 2400L), # la letra L al final significa ENTERO
+  makeIntegerParam("max.depth", lower = 7L, upper = 30L), # 0 significa profundidad infinita
+  makeIntegerParam("min.node.size", lower = 400L, upper = 5000L),
+  makeIntegerParam("mtry", lower = 7L, upper = 30L)
 )
 
 
@@ -168,8 +168,8 @@ dir.create("./exp/HT4330", showWarnings = FALSE)
 setwd("/home/tlichtig/buckets/b1/exp/HT4330") # Establezco el Working Directory DEL EXPERIMENTO
 
 # en estos archivos quedan los resultados
-kbayesiana <- "HT433.RDATA"
-klog <- "HT433.txt"
+kbayesiana <- "HT433-alt.RDATA"
+klog <- "HT433-alt.txt"
 
 
 GLOBAL_iteracion <- 0 # inicializo la variable global
