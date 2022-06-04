@@ -8,7 +8,7 @@ require("data.table")
 require("lightgbm")
 
 #Aqui se debe poner la carpeta de la computadora local
-setwd("D:\\gdrive\\ITBA2022A\\")   #Establezco el Working Directory
+setwd("/Users/tlichtig/Desktop/ITBA/2-mineria-de-datos/labo")   #Establezco el Working Directory
 
 #cargo el dataset donde voy a entrenar
 dataset  <- fread("./datasets/paquete_premium_202011.csv", stringsAsFactors= TRUE)
@@ -30,12 +30,13 @@ dtrain  <- lgb.Dataset( data= data.matrix(  dataset[ , campos_buenos, with=FALSE
 
 #genero el modelo con los parametros por default
 modelo  <- lgb.train( data= dtrain,
-                      param= list( objective=        "binary",
-                                   num_iterations=     50,
-                                   num_leaves=         64,
-                                   feature_fraction=    0.5,
-                                   min_data_in_leaf= 3000,
-                                   seed= 4 )
+                      params= list( objective=        "binary",
+                                   num_iterations=     67,
+                                   num_leaves=         31,
+                                   feature_fraction=    1.0,
+                                   learning_rate= 0.1,
+                                   min_data_in_leaf= 20,
+                                   seed= 999983 )
                     )
 
 #aplico el modelo a los datos sin clase

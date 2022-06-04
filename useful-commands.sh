@@ -1,5 +1,5 @@
-export INSTANCE_NAME=xgboost-opt-hist-573
-export SCRIPT=xgboost/z573_xgboost_histograma_BO.r
+export INSTANCE_NAME=z563_xgboost_original_BO
+export SCRIPT=xgboost/z563_xgboost_original_BO.r
 export CPU=8
 export RAM=$((1024 * 16))
 
