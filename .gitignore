@@ -187,6 +187,7 @@ datasets/
 
 labo/exp/*
 exp/*
+!exp/FE8120T
 
 !labo/exp/HT2020
 labo/exp/HT2020/*
