@@ -10,11 +10,11 @@ experiment <- toupper(args[2])
 writeLines(funcName)
 writeLines(experiment)
 
-source( "/home/tlichtig/labo/src/lib/exp_lib.r" )
+source("/home/tlichtig/labo/src/lib/exp_lib.r")
 
 writeLines("'exp_lib.r' loaded.")
 
-if (experiment == NA || experiment == "" || experiment == NULL) {
+if (is.na(experiment) || is.null(experiment) || (experiment == "")) {
   writeLines("No se seleccionó experimento.")
   exp_finalizar()
 }
