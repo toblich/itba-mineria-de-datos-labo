@@ -1,8 +1,11 @@
-export INSTANCE_NAME=z563_xgboost_original_BO
-export SCRIPT=xgboost/z563_xgboost_original_BO.r
+export EXPERIMENT=HT8310T
+export FUNC=start
 export CPU=8
-export RAM=$((1024 * 16))
+export RAM=$((1024 * 128))-ext
 
+# export SCRIPT=xgboost/z563_xgboost_original_BO.r
+
+export INSTANCE_NAME=vm-$(echo $EXPERIMET | awk '{print tolower($0)}')
 export MACHINE_TYPE=custom-$CPU-$RAM
 
 gcloud compute instances create "$INSTANCE_NAME" \
@@ -22,8 +25,8 @@ gcloud compute instances create "$INSTANCE_NAME" \
   --shielded-vtpm \
   --shielded-integrity-monitoring \
   --reservation-affinity=any \
-  --metadata-from-file=startup-script="/Users/tlichtig/Desktop/ITBA/2-mineria-de-datos/labo/startup-script.sh" \
-  --metadata=shutdown-script=suicidio.sh,r-script-path="/home/tlichtig/labo/src/$SCRIPT"
+  --metadata=shutdown-script=suicidio.sh,func=$FUNC,experiment=$EXPERIMENT \
+  --metadata-from-file=startup-script="/Users/tlichtig/Desktop/ITBA/2-mineria-de-datos/labo/startup-script.sh"
 
 
 # gcloud compute ssh "$INSTANCE_NAME"
