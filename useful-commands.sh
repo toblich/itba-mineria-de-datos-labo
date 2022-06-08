@@ -3,9 +3,7 @@ export FUNC=start
 export CPU=8
 export RAM=$((1024 * 128))-ext
 
-# export SCRIPT=xgboost/z563_xgboost_original_BO.r
-
-export INSTANCE_NAME=vm-$(echo $EXPERIMET | awk '{print tolower($0)}')
+export INSTANCE_NAME=vm-$(echo $EXPERIMENT | awk '{print tolower($0)}')
 export MACHINE_TYPE=custom-$CPU-$RAM
 
 gcloud compute instances create "$INSTANCE_NAME" \
@@ -29,6 +27,7 @@ gcloud compute instances create "$INSTANCE_NAME" \
   --metadata-from-file=startup-script="/Users/tlichtig/Desktop/ITBA/2-mineria-de-datos/labo/startup-script.sh"
 
 
-# gcloud compute ssh "$INSTANCE_NAME"
+
+gcloud compute ssh "$INSTANCE_NAME"
 
 # gcloud compute instances delete "$INSTANCE_NAME"
