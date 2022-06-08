@@ -1,13 +1,18 @@
 args <- commandArgs(trailingOnly = TRUE)
 
-argsStr <- paste(args, collapse = ",")
+argsStr <- paste(args, collapse = ", ")
 
 writeLines(sprintf("Launch script invoked with args %s", argsStr))
 
 funcName <- tolower(args[1])
 experiment <- toupper(args[2])
 
-source( "~/labo/src/lib/exp_lib.r" )
+writeLines(funcName)
+writeLines(experiment)
+
+source( "/home/tlichtig/labo/src/lib/exp_lib.r" )
+
+writeLines("'exp_lib.r' loaded.")
 
 if (experiment == NA || experiment == "" || experiment == NULL) {
   writeLines("No se seleccionó experimento.")
