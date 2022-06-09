@@ -178,6 +178,7 @@ Corregir  <- function( dataset )
 AgregarVariables  <- function( dataset )
 {
   gc()
+  writeLines("AgregarVariables")
   #INICIO de la seccion donde se deben hacer cambios con variables nuevas
 
   #creo un ctr_quarter que tenga en cuenta cuando los clientes hace 3 menos meses que estan
@@ -295,9 +296,10 @@ AgregarVariables  <- function( dataset )
 #------------------------------------------------------------------------------
 #calcula el ranking de la funcion
 
-Rankeador  <- function( dataset, cols )
+Rankeador  <- function( dataset, cols = c() )
 {
   gc()
+  writeLines("Rankeador")
   sufijo  <- "_rank"
 
   for( vcol in cols )
@@ -317,6 +319,7 @@ Rankeador  <- function( dataset, cols )
 Lags  <- function( cols, nlag, deltas )
 {
   gc()
+  writeLines("Lags")
   sufijo  <- paste0( "_lag", nlag )
 
   dataset[ , paste0( cols, sufijo) := shift(.SD, nlag, NA, "lag"),
@@ -421,6 +424,7 @@ TendenciaYmuchomas  <- function( dataset, cols, ventana=6, tendencia=TRUE, minim
                                  ratioavg=FALSE, ratiomax=FALSE)
 {
   gc()
+  writeLines("TendenciaYmuchomas")
   #Esta es la cantidad de meses que utilizo para la historia
   ventana_regresion  <- ventana
 
@@ -454,6 +458,7 @@ TendenciaYmuchomas  <- function( dataset, cols, ventana=6, tendencia=TRUE, minim
 
 Tony  <- function( cols )
 {
+  writeLines("Tony")
 
   sufijo  <- paste0( "_tony")
 
@@ -469,6 +474,7 @@ VPOS_CORTE  <- c()
 
 fganancia_lgbm_meseta  <- function(probs, datos)
 {
+  writeLines("fganancia_lgbm_meseta")
   vlabels  <- get_field(datos, "label")
   vpesos   <- get_field(datos, "weight")
 
@@ -498,6 +504,7 @@ GVEZ <- 1
 CanaritosImportancia  <- function( canaritos_ratio=0.2 )
 {
   gc()
+  writeLines("CanaritosImportancia")
   ReportarCampos( dataset )
   dataset[ , clase01:= ifelse( clase_ternaria=="CONTINUA", 0, 1 ) ]
 
@@ -588,7 +595,7 @@ if( PARAM$corregir )  Corregir( dataset )  #esta linea debe ir DESPUES de  Dummi
 
 if( PARAM$variablesmanuales )  AgregarVariables( dataset )
 
-if( PARAM$rankings ) Rankeador( dataset, PARAM$rankings )
+if( length(PARAM$rankings) > 0 ) Rankeador( dataset, PARAM$rankings )
 
 #--------------------------------------
 #Esta primera parte es muuuy  artesanal  y discutible  ya que hay multiples formas de hacerlo
