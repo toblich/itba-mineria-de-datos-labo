@@ -188,6 +188,7 @@ datasets/
 labo/exp/*
 exp/*
 !exp/*T/
+exp/*T/*.tsv
 
 !labo/exp/HT2020
 labo/exp/HT2020/*
