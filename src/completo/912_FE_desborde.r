@@ -262,7 +262,7 @@ AgregarVariables  <- function( dataset )
     dataset[ , t_mplazofijo_total := rowSums(cbind(mplazo_fijo_dolares, mplazo_fijo_pesos), na.rm = TRUE)] # Plazo fijo monto total
     dataset[ , t_minversion_total := rowSums(cbind(minversion1_pesos, minversion1_dolares, minversion2), na.rm = TRUE)] # Plazo fijo monto total
     dataset[ , t_mcapital := rowSums(cbind(mcaja_ahorro, mcuenta_corriente, t_mplazofijo_total, t_minversion_total), na.rm = TRUE)] # Capital total
-    dataset[ , t_payroll_sobre_capital := t_mpayroll_total / max(t_mcapital, 1)] # Haberes / capital
+    dataset[ , t_mpayroll_sobre_capital := t_mpayroll_total / max(t_mcapital, 1)] # Haberes / capital
 
     dataset[ , t_cpagodeservicios_total := rowSums(cbind(cpagodeservicios, cpagomiscuentas), na.rm=TRUE)] # Totalizo cant pagos de servicios y pagomiscuentas
     dataset[ , t_mpagodeservicios_total := rowSums(cbind(mpagodeservicios, mpagomiscuentas), na.rm=TRUE)] # Totalizo monto pagos de servicios y pagomiscuentas
