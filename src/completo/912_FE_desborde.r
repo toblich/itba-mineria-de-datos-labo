@@ -248,7 +248,24 @@ AgregarVariables  <- function( dataset )
   dataset[ , mvr_mpagominimo         := mv_mpagominimo  / mv_mlimitecompra ]
 
   #Aqui debe usted agregar sus propias nuevas variables
-  dataset[ , mvr_saldo_total_sobre_edad := mvr_msaldototal / cliente_edad ]
+  if (PARAM$variablesfalopa) {
+    dataset[ , t_mvr_saldo_total_sobre_edad := mvr_msaldototal / cliente_edad ] # Saldo tarjetas / edad
+
+    dataset[ , t_mrentabilidad_annual_escalada := mrentabilidad_annual / pmin(cliente_antiguedad, 12, na.rm = TRUE)] # Rentabilidad mensual media del último año
+
+    dataset[ , t_cseguros := rowSums(cbind(cseguro_vida, cseguro_auto, cseguro_vivienda, cseguro_accidentes_personales), na.rm=TRUE)] # Cantidad de seguros totales
+
+    dataset[ , t_mpayroll_total := rowSums((cbind(mpayroll, mpayroll2)), na.rm=TRUE)] # Haberes totales del mes
+    dataset[ , t_mpayroll_total_sobre_edad := t_mpayroll_total / cliente_edad] # Haberes totales del mes / edad
+
+    dataset[ , t_mplazofijo_total := rowSums(cbind(mplazo_fijo_dolares, mplazo_fijo_pesos), na.rm = TRUE)] # Plazo fijo monto total
+    dataset[ , t_minversion_total := rowSums(cbind(minversion1_pesos, minversion1_dolares, minversion2), na.rm = TRUE)] # Plazo fijo monto total
+    dataset[ , t_mcapital := rowSums(cbind(mcaja_ahorro, mcuenta_corriente, t_mplazofijo_total, t_minversion_total), na.rm = TRUE)] # Capital total
+    dataset[ , t_payroll_sobre_capital := t_mpayroll_total / max(t_mcapital, 1)] # Haberes / capital
+
+    dataset[ , t_cpagodeservicios_total := rowSums(cbind(cpagodeservicios, cpagomiscuentas), na.rm=TRUE)] # Totalizo cant pagos de servicios y pagomiscuentas
+    dataset[ , t_mpagodeservicios_total := rowSums(cbind(mpagodeservicios, mpagomiscuentas), na.rm=TRUE)] # Totalizo monto pagos de servicios y pagomiscuentas
+  }
 
   #valvula de seguridad para evitar valores infinitos
   #paso los infinitos a NULOS
@@ -275,6 +292,24 @@ AgregarVariables  <- function( dataset )
 
   ReportarCampos( dataset )
 }
+#------------------------------------------------------------------------------
+#calcula el ranking de la funcion
+
+Rankeador  <- function( dataset, cols )
+{
+  gc()
+  sufijo  <- "_rank"
+
+  for( vcol in cols )
+  {
+     dataset[ , paste0( vcol, sufijo) := frank( get(vcol), ties.method= "random")/ .N,
+                by= foto_mes ]
+  }
+
+  ReportarCampos( dataset )
+}
+#------------------------------------------------------------------------------
+
 #------------------------------------------------------------------------------
 #esta funcion supone que dataset esta ordenado por   <numero_de_cliente, foto_mes>
 #calcula el lag y el delta lag
@@ -553,6 +588,7 @@ if( PARAM$corregir )  Corregir( dataset )  #esta linea debe ir DESPUES de  Dummi
 
 if( PARAM$variablesmanuales )  AgregarVariables( dataset )
 
+if( PARAM$rankings ) Rankeador( dataset, PARAM$rankings )
 
 #--------------------------------------
 #Esta primera parte es muuuy  artesanal  y discutible  ya que hay multiples formas de hacerlo
