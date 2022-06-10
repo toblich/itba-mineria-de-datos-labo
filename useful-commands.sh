@@ -1,7 +1,8 @@
-export EXPERIMENT=HT8310T
-export FUNC=start
-export CPU=8
-export RAM=$((1024 * 128))-ext
+export EXPERIMENT=TS0001T
+export FUNC=restart
+export CPU=32
+export RAM=$((1024 * 256))-ext
+export DISK_SIZE=256
 
 export INSTANCE_NAME=vm-$(echo $EXPERIMENT | awk '{print tolower($0)}')
 export MACHINE_TYPE=custom-$CPU-$RAM
@@ -18,7 +19,7 @@ gcloud compute instances create "$INSTANCE_NAME" \
   --service-account=934014334952-compute@developer.gserviceaccount.com \
   --scopes=https://www.googleapis.com/auth/cloud-platform \
   --tags=http-server \
-  --create-disk=auto-delete=yes,boot=yes,device-name=$INSTANCE_NAME,image=projects/indigo-history-351015/global/images/dm-custom-with-logs,mode=rw,size=256,type=projects/indigo-history-351015/zones/us-west4-c/diskTypes/pd-standard \
+  --create-disk=auto-delete=yes,boot=yes,device-name=$INSTANCE_NAME,image=projects/indigo-history-351015/global/images/dm-custom-with-logs,mode=rw,size=$DISK_SIZE,type=projects/indigo-history-351015/zones/us-west4-c/diskTypes/pd-standard \
   --no-shielded-secure-boot \
   --shielded-vtpm \
   --shielded-integrity-monitoring \
@@ -28,6 +29,6 @@ gcloud compute instances create "$INSTANCE_NAME" \
 
 
 
-gcloud compute ssh "$INSTANCE_NAME"
+# gcloud compute ssh "$INSTANCE_NAME"
 
 # gcloud compute instances delete "$INSTANCE_NAME"
