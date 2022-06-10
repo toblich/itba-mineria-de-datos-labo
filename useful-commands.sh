@@ -1,7 +1,7 @@
-export EXPERIMENT=TS0001T
-export FUNC=restart
-export CPU=32
-export RAM=$((1024 * 256))-ext
+export EXPERIMENT=ZZ8410
+export FUNC=start
+export CPU=16
+export RAM=$((1024 * 128))-ext
 export DISK_SIZE=256
 
 export INSTANCE_NAME=vm-$(echo $EXPERIMENT | awk '{print tolower($0)}')

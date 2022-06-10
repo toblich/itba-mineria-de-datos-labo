@@ -2,7 +2,7 @@
 
 googlecloud:
   RAM:   128
-  vCPU:    8
+  vCPU:   16
   disk:  256
 
 
@@ -47,4 +47,3 @@ environment:
   repo_dir: "~/labo/"
   exp_dir:  "~/buckets/b1/exp/"
   catalog:  "catalogo.txt"
-
