@@ -189,6 +189,7 @@ labo/exp/*
 exp/*
 !exp/*T/
 exp/*T/*.tsv
+exp/*T/*.txt
 
 !labo/exp/HT2020
 labo/exp/HT2020/*
