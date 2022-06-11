@@ -26,5 +26,8 @@ if (process.cwd() !== '/Users/tlichtig/Desktop/ITBA/2-mineria-de-datos/labo') {
   process.exit(1);
 }
 
-fs.mkdirSync(`./exp/${newName}`);
-fs.copyFileSync(`./exp/${original}/${original}.yml`, `./exp/${newName}/${newName}.yml`);
+const newDirName = `./exp/${newName}`;
+if (!fs.existsSync(newDirName)) {
+  fs.mkdirSync(newDirName);
+}
+fs.copyFileSync(`./exp/${original}/${original}.yml`, `${newDirName}/${newName}.yml`);
