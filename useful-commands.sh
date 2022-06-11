@@ -1,7 +1,7 @@
-export EXPERIMENT=ZZ0002T
+export EXPERIMENT=TS0002T
 export FUNC=start
 export CPU=32
-export RAM=$((1024 * 200))-ext
+export RAM=$((1024 * 256))-ext
 export DISK_SIZE=512
 
 export INSTANCE_NAME=vm-$(echo $EXPERIMENT | awk '{print tolower($0)}')
@@ -27,7 +27,7 @@ gcloud compute instances create "$INSTANCE_NAME" \
   --metadata=shutdown-script=suicidio.sh,func=$FUNC,experiment=$EXPERIMENT \
   --metadata-from-file=startup-script="/Users/tlichtig/Desktop/ITBA/2-mineria-de-datos/labo/startup-script.sh"
 
-
+sleep 60;  gcloud compute ssh "$INSTANCE_NAME" --command 'tail -n 100 -f /home/tlichtig/script.log'
 
 # gcloud compute ssh "$INSTANCE_NAME"
 
