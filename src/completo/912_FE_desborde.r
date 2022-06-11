@@ -268,6 +268,25 @@ AgregarVariables  <- function( dataset )
     dataset[ , t_mpagodeservicios_total := rowSums(cbind(mpagodeservicios, mpagomiscuentas), na.rm=TRUE)] # Totalizo monto pagos de servicios y pagomiscuentas
   }
 
+  if (PARAM$variablesfalopa2) {
+    dataset[ , t_cdebitos_automaticos := rowSums(cbind(ccuenta_debitos_automaticos, ctarjeta_master_debitos_automaticos, ctarjeta_visa_debitos_automaticos), na.rm = TRUE)]
+    dataset[ , t_mdebitos_automaticos := rowSums(cbind(mcuenta_debitos_automaticos, mtarjeta_master_debitos_automaticos, mtarjeta_visa_debitos_automaticos), na.rm = TRUE)]
+
+    dataset[ , fg_trx_total := rowSums( cbind(fg_trx_canales, ctarjeta_visa_trx, ctarjeta_master_trx, ccajas_trx, cpagodeservicios, cpagomiscuentas, ccheques_depositados, ccheques_emitidos) , na.rm=TRUE ) ]
+    dataset[ , fg_m_descuentos := rowSums( cbind(mcajeros_propios_descuentos, mtarjeta_visa_descuentos, mtarjeta_master_descuentos) , na.rm=TRUE )  ]
+    dataset[ , fg_c_descuentos := rowSums( cbind(ccajeros_propios_descuentos, ctarjeta_visa_descuentos, ctarjeta_master_descuentos) , na.rm=TRUE )  ]
+    dataset[ , jeipi_tarjetas_delincuencia := Master_delinquency + Visa_delinquency ]
+    dataset[ , descuentos_totales  := mcajeros_propios_descuentos+mtarjeta_visa_descuentos+mtarjeta_master_descuentos]
+
+    # Ratios falopas
+    dataset[ , fg_ss10 := mrentabilidad / cproductos ]
+    dataset[ , t_ss10 := mcapital / cproductos ]
+    dataset[ , t_ss10 := cproductos / cliente_edad ]
+    dataset[ , t_jeipi_catm_sobre_otras := catm_trx / (catm_trx + catm_trx_other + 1) ]
+    dataset[ , t_jeipi_matm_sobre_otras := matm / (matm + matm_other + 1) ]
+    dataset[ , t_descuentos_sobre_saldo_tarjetas := fg_m_descuentos / mv_saldopesos ]
+  }
+
   #valvula de seguridad para evitar valores infinitos
   #paso los infinitos a NULOS
   infinitos      <- lapply(names(dataset),function(.name) dataset[ , sum(is.infinite(get(.name)))])
