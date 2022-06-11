@@ -494,7 +494,7 @@ VPOS_CORTE  <- c()
 
 fganancia_lgbm_meseta  <- function(probs, datos)
 {
-  writeLines("fganancia_lgbm_meseta")
+  # writeLines("fganancia_lgbm_meseta")
   vlabels  <- get_field(datos, "label")
   vpesos   <- get_field(datos, "weight")
 
@@ -644,6 +644,7 @@ for( i in 1:length( PARAM$lag ) )
 {
   if( PARAM$lag[i] )
   {
+    writeLines(paste("Ejecutando lag", i))
     #veo si tengo que ir agregando variables
     if( PARAM$acumulavars )  cols_lagueables  <- setdiff( colnames(dataset), PARAM$const$campos_fijos )
 
