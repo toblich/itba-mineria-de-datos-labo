@@ -250,14 +250,14 @@ AgregarVariables  <- function( dataset )
 
   #Aqui debe usted agregar sus propias nuevas variables
   if (PARAM$variablesfalopa) {
-    dataset[ , t_mvr_saldo_total_sobre_edad := mvr_msaldototal / cliente_edad ] # Saldo tarjetas / edad
+    dataset[ , t_mvr_saldo_total_sobre_edad := mvr_msaldototal / (cliente_edad + 1) ] # Saldo tarjetas / edad
 
     dataset[ , t_mrentabilidad_annual_escalada := mrentabilidad_annual / pmin(cliente_antiguedad, 12, na.rm = TRUE)] # Rentabilidad mensual media del último año
 
     dataset[ , t_cseguros := rowSums(cbind(cseguro_vida, cseguro_auto, cseguro_vivienda, cseguro_accidentes_personales), na.rm=TRUE)] # Cantidad de seguros totales
 
     dataset[ , t_mpayroll_total := rowSums((cbind(mpayroll, mpayroll2)), na.rm=TRUE)] # Haberes totales del mes
-    dataset[ , t_mpayroll_total_sobre_edad := t_mpayroll_total / cliente_edad] # Haberes totales del mes / edad
+    dataset[ , t_mpayroll_total_sobre_edad := t_mpayroll_total / (cliente_edad + 1) ] # Haberes totales del mes / edad
 
     dataset[ , t_mplazofijo_total := rowSums(cbind(mplazo_fijo_dolares, mplazo_fijo_pesos), na.rm = TRUE)] # Plazo fijo monto total
     dataset[ , t_minversion_total := rowSums(cbind(minversion1_pesos, minversion1_dolares, minversion2), na.rm = TRUE)] # Plazo fijo monto total
@@ -276,16 +276,16 @@ AgregarVariables  <- function( dataset )
     dataset[ , fg_trx_total := rowSums( cbind(fg_trx_canales, ctarjeta_visa_trx, ctarjeta_master_trx, ccajas_trx, cpagodeservicios, cpagomiscuentas, ccheques_depositados, ccheques_emitidos) , na.rm=TRUE ) ]
     dataset[ , fg_m_descuentos := rowSums( cbind(mcajeros_propios_descuentos, mtarjeta_visa_descuentos, mtarjeta_master_descuentos) , na.rm=TRUE )  ]
     dataset[ , fg_c_descuentos := rowSums( cbind(ccajeros_propios_descuentos, ctarjeta_visa_descuentos, ctarjeta_master_descuentos) , na.rm=TRUE )  ]
-    dataset[ , jeipi_tarjetas_delincuencia := Master_delinquency + Visa_delinquency ]
-    dataset[ , descuentos_totales  := mcajeros_propios_descuentos+mtarjeta_visa_descuentos+mtarjeta_master_descuentos]
+    dataset[ , jeipi_tarjetas_delincuencia := rowSums(cbind(Master_delinquency, Visa_delinquency), na.rm = TRUE) ]
+    dataset[ , descuentos_totales  := rowSums(cbind(mcajeros_propios_descuentos, mtarjeta_visa_descuentos, mtarjeta_master_descuentos), na.rm = TRUE)]
 
     # Ratios falopas
-    dataset[ , fg_ss10 := mrentabilidad / cproductos ]
-    dataset[ , t_ss10 := t_mcapital / cproductos ]
-    dataset[ , t_ss10 := cproductos / cliente_edad ]
+    dataset[ , fg_ss10 := mrentabilidad / (cproductos + 1) ]
+    dataset[ , t_ss10 := t_mcapital / (cproductos + 1) ]
+    dataset[ , t_ss10 := cproductos / (cliente_edad + 1) ]
     dataset[ , t_jeipi_catm_sobre_otras := catm_trx / (catm_trx + catm_trx_other + 1) ]
     dataset[ , t_jeipi_matm_sobre_otras := matm / (matm + matm_other + 1) ]
-    dataset[ , t_descuentos_sobre_saldo_tarjetas := fg_m_descuentos / mv_msaldopesos ]
+    dataset[ , t_descuentos_sobre_saldo_tarjetas := fg_m_descuentos / (mv_msaldopesos + 1) ]
   }
 
   #valvula de seguridad para evitar valores infinitos
