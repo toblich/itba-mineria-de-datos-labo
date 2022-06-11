@@ -270,7 +270,7 @@ AgregarVariables  <- function( dataset )
 
   if (PARAM$variablesfalopa2) {
     dataset[ , t_cdebitos_automaticos := rowSums(cbind(ccuenta_debitos_automaticos, ctarjeta_master_debitos_automaticos, ctarjeta_visa_debitos_automaticos), na.rm = TRUE)]
-    dataset[ , t_mdebitos_automaticos := rowSums(cbind(mcuenta_debitos_automaticos, mtarjeta_master_debitos_automaticos, mtarjeta_visa_debitos_automaticos), na.rm = TRUE)]
+    dataset[ , t_mdebitos_automaticos := rowSums(cbind(mcuenta_debitos_automaticos, mttarjeta_master_debitos_automaticos, mtarjeta_visa_debitos_automaticos), na.rm = TRUE)]
 
     dataset[ , fg_trx_total := rowSums( cbind(fg_trx_canales, ctarjeta_visa_trx, ctarjeta_master_trx, ccajas_trx, cpagodeservicios, cpagomiscuentas, ccheques_depositados, ccheques_emitidos) , na.rm=TRUE ) ]
     dataset[ , fg_m_descuentos := rowSums( cbind(mcajeros_propios_descuentos, mtarjeta_visa_descuentos, mtarjeta_master_descuentos) , na.rm=TRUE )  ]
