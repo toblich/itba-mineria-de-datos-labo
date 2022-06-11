@@ -285,7 +285,7 @@ AgregarVariables  <- function( dataset )
     dataset[ , t_ss10 := cproductos / cliente_edad ]
     dataset[ , t_jeipi_catm_sobre_otras := catm_trx / (catm_trx + catm_trx_other + 1) ]
     dataset[ , t_jeipi_matm_sobre_otras := matm / (matm + matm_other + 1) ]
-    dataset[ , t_descuentos_sobre_saldo_tarjetas := fg_m_descuentos / mv_saldopesos ]
+    dataset[ , t_descuentos_sobre_saldo_tarjetas := fg_m_descuentos / mv_msaldopesos ]
   }
 
   #valvula de seguridad para evitar valores infinitos
