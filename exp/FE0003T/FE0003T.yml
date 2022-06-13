@@ -34,7 +34,7 @@ param:
     - mcaja_ahorro
     - t_mtarjeta_consumo
 
-  truncar_previos: 201901 # Descarto todo 2018
+  truncar_previos: 201904 # Descarto todo 2018
 
   tendenciaYmuchomas:
     correr: TRUE #Great power comes with great responsability
@@ -51,9 +51,9 @@ param:
   # 0 1 2 3 4 5 6 7 8
   #lags y sus deltas , 6 posiciones
   lag:   [ TRUE, TRUE, FALSE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE ]
-  delta: [ TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, FALSE, FALSE, FALSE, FALSE ]
-  rations: [ TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, FALSE, FALSE, FALSE, FALSE ]
-  canaritosratio: [ 0, 0, 0, 0, 0, 0.1, 0.15, 0.2, 0.25, 0.3 ]
+  delta: [ TRUE, FALSE, TRUE, FALSE, FALSE, TRUE, FALSE, FALSE, FALSE, FALSE ]
+  # ratios: [ TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, FALSE, FALSE, FALSE, FALSE ]
+  canaritosratio: [ 0, 0, 0.1, 0, 0, 0.1, 0.15, 0.2, 0.25, 0.3 ]
 
   tony:  FALSE
 
