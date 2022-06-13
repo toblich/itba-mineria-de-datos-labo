@@ -100,7 +100,7 @@ exp_finalizar  <- function( suicide= TRUE)
   exp_mlflow_script_end()
 
   #cierro el run  de mlflow  en caso que exista
-  if( exists( "MLFLOW_LOG" ) )  mlflow_end_run( MLFLOW_LOG$run_uuid)
+  if( exists( "MLFLOW_LOG" ) )  mlflow_end_run( run_id= MLFLOW_LOG$run_uuid, status= "FINISHED" )
   
   #agrego al log.txt que el script R termino
   st  <- paste0( EXP$experiment$name, "\t",
