@@ -193,10 +193,13 @@ AgregarVariables  <- function( dataset )
   #se crean los nuevos campos para MasterCard  y Visa, teniendo en cuenta los NA's
   #varias formas de combinar Visa_status y Master_status
   dataset[ , mv_status01       := pmax( Master_status,  Visa_status, na.rm = TRUE) ]
-  dataset[ , mv_status02       := Master_status +  Visa_status ]
-  dataset[ , mv_status03       := pmax( ifelse( is.na(Master_status), 10, Master_status) , ifelse( is.na(Visa_status), 10, Visa_status) ) ]
-  dataset[ , mv_status04       := ifelse( is.na(Master_status), 10, Master_status)  +  ifelse( is.na(Visa_status), 10, Visa_status)  ]
-  dataset[ , mv_status05       := ifelse( is.na(Master_status), 10, Master_status)  +  100*ifelse( is.na(Visa_status), 10, Visa_status)  ]
+
+  if (PARAM$incluir_status_inutiles) {
+    dataset[ , mv_status02       := Master_status +  Visa_status ]
+    dataset[ , mv_status03       := pmax( ifelse( is.na(Master_status), 10, Master_status) , ifelse( is.na(Visa_status), 10, Visa_status) ) ]
+    dataset[ , mv_status04       := ifelse( is.na(Master_status), 10, Master_status)  +  ifelse( is.na(Visa_status), 10, Visa_status)  ]
+    dataset[ , mv_status05       := ifelse( is.na(Master_status), 10, Master_status)  +  100*ifelse( is.na(Visa_status), 10, Visa_status)  ]
+  }
 
   dataset[ , mv_status06       := ifelse( is.na(Visa_status),
                                           ifelse( is.na(Master_status), 10, Master_status),
@@ -274,18 +277,27 @@ AgregarVariables  <- function( dataset )
 
     dataset[ , fg_trx_canales := rowSums( cbind(cmobile_app_trx, ccallcenter_trx, chomebanking_trx, catm_trx_other, catm_trx, ctarjeta_debito_trx) , na.rm=TRUE ) ]
     dataset[ , fg_trx_total := rowSums( cbind(fg_trx_canales, ctarjeta_visa_trx, ctarjeta_master_trx, ccajas_trx, cpagodeservicios, cpagomiscuentas, ccheques_depositados, ccheques_emitidos) , na.rm=TRUE ) ]
-    dataset[ , fg_m_descuentos := rowSums( cbind(mcajeros_propios_descuentos, mtarjeta_visa_descuentos, mtarjeta_master_descuentos) , na.rm=TRUE )  ]
-    dataset[ , fg_c_descuentos := rowSums( cbind(ccajeros_propios_descuentos, ctarjeta_visa_descuentos, ctarjeta_master_descuentos) , na.rm=TRUE )  ]
-    dataset[ , jeipi_tarjetas_delincuencia := rowSums(cbind(Master_delinquency, Visa_delinquency), na.rm = TRUE) ]
-    dataset[ , descuentos_totales  := rowSums(cbind(mcajeros_propios_descuentos, mtarjeta_visa_descuentos, mtarjeta_master_descuentos), na.rm = TRUE)]
+
+    if (PARAM$incluir_variables_inutiles) {
+      dataset[ , fg_m_descuentos := rowSums( cbind(mcajeros_propios_descuentos, mtarjeta_visa_descuentos, mtarjeta_master_descuentos) , na.rm=TRUE )  ]
+      dataset[ , fg_c_descuentos := rowSums( cbind(ccajeros_propios_descuentos, ctarjeta_visa_descuentos, ctarjeta_master_descuentos) , na.rm=TRUE )  ]
+      dataset[ , descuentos_totales  := rowSums(cbind(mcajeros_propios_descuentos, mtarjeta_visa_descuentos, mtarjeta_master_descuentos), na.rm = TRUE)]
+      dataset[ , jeipi_tarjetas_delincuencia := rowSums(cbind(Master_delinquency, Visa_delinquency), na.rm = TRUE) ]
+      dataset[ , t_jeipi_catm_sobre_otras := catm_trx / (catm_trx + catm_trx_other + 1) ]
+      dataset[ , t_jeipi_matm_sobre_otras := matm / (matm + matm_other + 1) ]
+      dataset[ , t_descuentos_sobre_saldo_tarjetas := fg_m_descuentos / (mv_msaldopesos + 1) ]
+    }
+
+    dataset[ , t_tarjetas_delincuencia := pmax(Master_delinquency, Visa_delinquency, na.rm = TRUE) ]
 
     # Ratios falopas
     dataset[ , fg_ss10 := mrentabilidad / (cproductos + 1) ]
-    dataset[ , t_ss10 := t_mcapital / (cproductos + 1) ]
     dataset[ , t_ss10 := cproductos / (cliente_edad + 1) ]
-    dataset[ , t_jeipi_catm_sobre_otras := catm_trx / (catm_trx + catm_trx_other + 1) ]
-    dataset[ , t_jeipi_matm_sobre_otras := matm / (matm + matm_other + 1) ]
-    dataset[ , t_descuentos_sobre_saldo_tarjetas := fg_m_descuentos / (mv_msaldopesos + 1) ]
+  }
+
+  if ( PARAM$variablesfalopa3 ) {
+    dataset[ , t_ss11 := t_mcapital / (cproductos + 1) ]
+    dataset[, t_mtarjeta_consumo := rowSums(cbind( mtarjeta_master_consumo, mtarjeta_visa_consumo), na.rm = TRUE)]
   }
 
   #valvula de seguridad para evitar valores infinitos
@@ -307,6 +319,7 @@ AgregarVariables  <- function( dataset )
   if( nans_qty > 0 )
   {
     cat( "ATENCION, hay", nans_qty, "valores NaN 0/0 en tu dataset. Seran pasados arbitrariamente a 0\n" )
+    print(nans)
     cat( "Si no te gusta la decision, modifica a gusto el programa!\n\n")
     dataset[mapply(is.nan, dataset)] <<- 0
   }
@@ -604,6 +617,11 @@ exp_iniciar( )
 nom_arch  <- exp_nombre_archivo( PARAM$files$input$dentrada )
 dataset   <- fread( nom_arch )
 
+if ( PARAM$truncar_previos ) {
+  dataset <- dataset[ foto_mes >= PARAM$truncar_previos ]
+  gc()
+}
+
 #ordeno el dataset por <numero_de_cliente, foto_mes> para poder hacer lags
 setorderv( dataset, PARAM$const$campos_sort )
 
@@ -650,10 +668,9 @@ for( i in 1:length( PARAM$lag ) )
 
     cols_lagueables  <- intersect( colnames(dataset), cols_lagueables )
     Lags( cols_lagueables, i, PARAM$delta[ i ] )   #calculo los lags de orden  i
-
-    #elimino las variables poco importantes, para hacer lugar a las importantes
-    if( PARAM$canaritosratio[ i ] > 0 )  CanaritosImportancia( canaritos_ratio= unlist(PARAM$canaritosratio[ i ]) )
   }
+  #elimino las variables poco importantes, para hacer lugar a las importantes
+  if( PARAM$canaritosratio[ i ] > 0 )  CanaritosImportancia( canaritos_ratio= unlist(PARAM$canaritosratio[ i ]) )
 }
 
 
