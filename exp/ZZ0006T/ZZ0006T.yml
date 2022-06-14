@@ -12,7 +12,7 @@ experiment:
   script: "src/completo/999_ZZ_lightgbm_semillerio.r"
   restart: TRUE
   name: "exp"
-  requires: ["HT0005T"]
+  requires: ["HT0007T"]
 
 param:
   semilla_primos: 100003
