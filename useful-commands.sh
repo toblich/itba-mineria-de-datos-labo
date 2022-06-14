@@ -1,8 +1,8 @@
-export EXPERIMENT=TS0002T
+export EXPERIMENT=ZZ0007T
 export FUNC=start
 export CPU=32
 export RAM=$((1024 * 256))-ext
-export DISK_SIZE=512
+export DISK_SIZE=350
 
 export INSTANCE_NAME=vm-$(echo $EXPERIMENT | awk '{print tolower($0)}')
 export MACHINE_TYPE=custom-$CPU-$RAM
