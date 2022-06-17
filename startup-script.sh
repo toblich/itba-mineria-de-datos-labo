@@ -2,7 +2,7 @@
 
 cd /home/tlichtig
 
-RSCRIPTPATH="/home/tlichtig/labo/launch-script.r"
+RSCRIPTPATH=$(curl http://metadata.google.internal/computeMetadata/v1/instance/attributes/rscriptpath -H "Metadata-Flavor: Google")
 FUNC=$(curl http://metadata.google.internal/computeMetadata/v1/instance/attributes/func -H "Metadata-Flavor: Google")
 EXPERIMENT=$(curl http://metadata.google.internal/computeMetadata/v1/instance/attributes/experiment -H "Metadata-Flavor: Google")
 
