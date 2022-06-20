@@ -1,0 +1,76 @@
+googlecloud:
+  RAM:   512
+  vCPU:   32
+  disk:  512
+
+
+experiment:
+  script: "src/completo/912_FE_desborde.r"
+  restart: FALSE
+  name: "exp"
+  requires: [ "DT0001" ]
+
+
+param:
+  dummiesNA: FALSE
+
+  corregir: TRUE    #se se corrige los campos/foto_mes  MALOS
+  variablesdrift: [] #variables que se eliminan porque estan mal en el futuro
+
+  variablesmanuales: TRUE
+
+  incluir_status_inutiles: FALSE
+
+  variablesfalopa: TRUE
+  variablesfalopa2: TRUE
+  variablesfalopa3: TRUE
+  incluir_variables_inutiles: FALSE
+
+  acumulavars: TRUE   #a lo nuevo lo va aplicando
+
+  rankings:
+    - t_mcapital
+    - t_mpayroll_sobre_capital
+    - mv_mlimitecompra
+    - mcaja_ahorro
+    - t_mtarjeta_consumo
+
+  truncar_previos: 201901 # Descarto todo 2018
+
+  tendenciaYmuchomas:
+    correr: TRUE #Great power comes with great responsability
+    ventana: 6
+    tendencia: TRUE
+    minimo:    TRUE
+    maximo:    FALSE
+    promedio:  TRUE
+    ratioavg:  TRUE
+    ratiomax:  FALSE
+
+
+  #lags y sus deltas , 6 posiciones
+  lag:   [ TRUE, TRUE, TRUE, TRUE, TRUE, TRUE ]
+  delta: [ TRUE, TRUE, TRUE, TRUE, TRUE, TRUE ]
+  canaritosratio: [ 0.2, 0.2, 0.2, 0.2, 0.2, 0.2 ]
+
+  tony:  FALSE
+
+
+  files:
+    input:
+      dentrada: [ "dataset" ]
+    output:
+      dsalida: "paquete_premium_ext.csv.gz"
+
+  const:
+    clase: "clase_ternaria"
+    futuro: [ 202101 ]
+    campos_sort:  [ "numero_de_cliente", "foto_mes" ]   #por donde hago el sort inicial
+    campos_fijos: [ "numero_de_cliente", "foto_mes", "mes", "clase_ternaria" ]
+    modelo:
+
+
+environment:
+  repo_dir: "~/labo/"
+  exp_dir:  "~/buckets/b1/exp/"
+  catalog:  "catalogo.txt"
