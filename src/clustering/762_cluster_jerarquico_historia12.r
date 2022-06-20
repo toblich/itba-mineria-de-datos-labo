@@ -20,6 +20,8 @@ START <- strftime(as.POSIXlt(Sys.time(), tz = "UTC"), "%Y-%m-%d_%H:%M:%S%z")
 
 setwd("~/buckets/b1/") # cambiar por la carpeta local
 
+writeLines("Leyendo el archivo...")
+
 # leo el dataset
 dataset_grande <- fread("./exp/FE0001T/paquete_premium_ext.csv.gz", stringsAsFactors = TRUE)
 
@@ -188,7 +190,7 @@ campos_buenos <- c(
   # "mpagomiscuentas"
 )
 
-
+writeLines("Creando randomForest")
 
 # Ahora, a esperar mucho con este algoritmo del pasado que NO correr en paralelo, patetico
 modelo <- randomForest(
@@ -198,6 +200,8 @@ modelo <- randomForest(
   proximity = TRUE,
   oob.prox = TRUE
 )
+
+writeLines("Generando clusters")
 
 # genero los clusters jerarquicos
 hclust.rf <- hclust(as.dist(1.0 - modelo$proximity), # distancia = 1.0 - proximidad
@@ -222,6 +226,8 @@ setwd("~/buckets/b1/exp/ST7621")
 h <- 20
 distintos <- 0
 
+writeLines("While raro")
+
 while (h > 0 & !(distintos >= 6 & distintos <= 7)) {
   h <- h - 1
   rf.cluster <- cutree(hclust.rf, h)
@@ -237,6 +243,8 @@ while (h > 0 & !(distintos >= 6 & distintos <= 7)) {
 # sacar estadicas por cluster
 
 dataset[, .N, cluster2] # tamaño de los clusters
+
+writeLines("Escribiendo outputs")
 
 # grabo el dataset en el bucket, luego debe bajarse a la PC y analizarse
 fwrite(dataset,
