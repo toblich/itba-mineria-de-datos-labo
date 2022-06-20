@@ -1,4 +1,6 @@
 rm(list = ls())
+gc()
+
 require("ggplot2")
 library("ggrepel")
 library("directlabels")
@@ -13,12 +15,19 @@ d[, pos2 := -pos]
 setorder(d, cluster2, foto_mes)
 # str(d)
 
-
-
 columnas <- colnames(d)
-excluir <- c("foto_mes", "numero_de_cliente", "pos", "pos2")
+excluir <- c("foto_mes", "numero_de_cliente", "pos", "pos2", "clase_ternaria", "cluster2",
+  "Visa_cadelantosefectivo", "Visa_cconsumos", "Visa_mconsumototal", "Visa_mpagosdolares", "Visa_mpagospesos",
+  "Visa_madelantodolares", "Visa_madelantopesos", "Visa_mconsumosdolares", "Visa_mconsumospesos", "Visa_Finiciomora",
+  "Master_mpagominimo", "Master_cadelantosefectivo", "Master_cconsumos", "Master_mconsumototal", "Master_fechaalta",
+  "Master_mpagosdolares", "Master_mpagospesos", "Master_mpagado", "Master_fultimo_cierre", "Master_madelantodolares",
+  "Master_madelantopesos", "Master_mlimitecompra", "Master_mconsumosdolares", "Master_mconsumospesos",
+  "Master_msaldodolares", "Master_msaldopesos", "Master_msaldototal", "Master_Finiciomora", "Master_Fvencimiento",
+  "Master_mfinanciacion_limite", "Master_status", "Master_delinquency", "mtarjeta_master_descuentos",
+  "mtarjeta_visa_descuentos", "tpaquete2")
 features <- setdiff(columnas, excluir)
 
+str(features)
 
 feature <- "mpayroll"
 for (feature in features) {
