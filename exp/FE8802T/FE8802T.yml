@@ -11,7 +11,7 @@ experiment:
   type: "FeatureEngineering"
   tags: [ "normal" ]
   description: "lag1 delta1 tendencia promedio SIN filtro canaritos"
-  requires: [ "DD0001" ]
+  requires: [ "DT0001" ]
 
 param:
   dummiesNA: FALSE
