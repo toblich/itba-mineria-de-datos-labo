@@ -1,0 +1,69 @@
+googlecloud:
+  RAM:   128
+  vCPU:    8
+  disk:  256
+
+
+experiment:
+  script: "src/completo/z912_FE_desborde.r"
+  restart: FALSE
+  name: "exp"
+  type: "FeatureEngineering"
+  tags: [ "normal" ]
+  description: "lag1 delta1 tendencia promedio SIN filtro canaritos"
+  requires: [ "DD0001" ]
+
+param:
+  dummiesNA: FALSE
+
+  corregir: TRUE    #se se corrige los campos/foto_mes  MALOS
+  variablesdrift: [] #variables que se eliminan porque estan mal en el futuro
+
+  variablesmanuales: TRUE
+  incluir_status_inutiles: FALSE
+  variablesfalopa: TRUE
+  variablesfalopa2: TRUE
+  variablesfalopa3: TRUE
+  incluir_variables_inutiles: FALSE
+
+  acumulavars: FALSE   #a lo nuevo lo va aplicando
+
+  truncar_previos: 201901 # Descarto todo 2018
+
+  tendenciaYmuchomas:
+    correr: TRUE #Great power comes with great responsability
+    ventana: 6
+    tendencia: TRUE
+    minimo:    FALSE
+    maximo:    FALSE
+    promedio:  TRUE
+    ratioavg:  TRUE
+    ratiomax:  FALSE
+
+
+  #lags y sus deltas , 6 posiciones
+  lag:   [ TRUE, TRUE, FALSE, TRUE, FALSE, FALSE ]
+  delta: [ TRUE, TRUE, FALSE, TRUE, FALSE, FALSE ]
+  canaritosratio: [ 0, 0.2, 0, 0.2, 0, 0 ]
+
+  tony:  FALSE
+
+
+  files:
+    input:
+      dentrada: [ "dataset" ]
+    output:
+      dsalida: "paquete_premium_ext.csv.gz"
+
+  const:
+    clase: "clase_ternaria"
+    futuro: [ 202101 ]
+    campos_sort:  [ "numero_de_cliente", "foto_mes" ]   #por donde hago el sort inicial
+    campos_fijos: [ "numero_de_cliente", "foto_mes", "mes", "clase_ternaria" ]
+    modelo:
+
+
+environment:
+  repo_dir: "~/labo/"
+  exp_dir:  "~/buckets/b1/exp/"
+  catalog:  "catalogo.txt"
